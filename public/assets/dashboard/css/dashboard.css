@@ -269,7 +269,7 @@ header {
 
 .widgrt-title {
     color: #606060;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--headingFont);
     font-size: 15px;
 }
 

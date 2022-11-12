@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ციტატები ფილმებიდან</title>
+    <title>{{ isset($pagetitle) ? $pagetitle : __('main.quotesFromMovies') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Styles -->

@@ -25,7 +25,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')->withSuccess('You have Successfully loggedin');
+            return redirect()->route('dashboard');
         }
 
         return redirect("login")->withSuccess('Oppes! You have entered invalid credentials');
