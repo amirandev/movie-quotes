@@ -16,8 +16,12 @@ class CreateQuotesTable extends Migration
         Schema::create('quotes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('image')->nullable();
-            $table->text('text')->nullable();
+            $table->text('text_en')->nullable();
+            $table->text('text_ka')->nullable();
             $table->integer('movie_id');
+            $table->integer('deleted');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

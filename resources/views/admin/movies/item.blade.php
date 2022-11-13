@@ -15,7 +15,7 @@
                         <a href="#" class="text-dark text-center">{{ isLang('ka') ? $row->title_ka : $row->title_en }}</a>
                     </div>
                     <div class="mb-0 smalltextAuthor">{{ __('main.director') }}:
-                        <a href="#" class="fz-14">{{ isLang('ka') : $row->director->name_ka : $row->director->name_en }}</a>
+                        <a href="#" class="fz-14">{{ isLang('ka') ? $row->director->name_ka : $row->director->name_en }}</a>
                     </div>
                 </div>
 

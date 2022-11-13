@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Actions;
-use App\Models\Directors as Director;
+use App\Models\Directors;
 use App\Models\Movies;
 use App\Models\Quotes;
 use Validator;
 
-
-class Directors{
+class DirectorActions{
     public $image = null;
     public $id = 0;
 
@@ -34,7 +33,7 @@ class Directors{
 
     public function Insert ()
     {
-        Director::insert([
+        Directors::insert([
             'name_en' => trim(request()->post('name_en')),
             'name_ka' => trim(request()->post('name_ka')),
             'image' => trim($this->image),
@@ -60,7 +59,7 @@ class Directors{
             $values['image'] = trim($this->saveBase64($this->image, 'directors'));
         }
 
-        Director::where('id', $this->id)->update($values);
+        Directors::where('id', $this->id)->update($values);
     }
 
     function sortByNumTo(){
@@ -94,7 +93,7 @@ class Directors{
         $sort = $this->sortByNumTo();
         $search = trim(request()->get('search'));
 
-        $directors = Director::where('deleted', 0)->where(function ($query) use ($search) {
+        $directors = Directors::where('deleted', 0)->where(function ($query) use ($search) {
             $query->where('name_en', 'like', "%{$search}%")->orWhere('name_ka', 'like', "%{$search}%");
         })
         ->orderBy($sort->col, $sort->by)->paginate(3);
@@ -119,6 +118,6 @@ class Directors{
         Movies::where('director_id', $this->id)->update(['deleted' => 1]);;
 
         // თავად ფილმიც გავუშვათ ნაგავში
-        Director::where('id', $this->id)->update(['deleted' => 1]);
+        Directors::where('id', $this->id)->update(['deleted' => 1]);
     }
 }

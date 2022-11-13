@@ -18,47 +18,17 @@ class QuotesAdmin extends HelperController
 
     public function AddMovie (Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'text_en' => 'required|max:535',
-            'text_ka' => 'required|max:535',
-            'movie' => 'required|numeric'
-        ]);
+        $actions = new QuoteActions();
+        if($actions->inputsFail()) return pleaseFillAllFields();
 
-        if ($validator->fails()) return pleaseFillAllFields();
-
-        $image = $this->saveBase64($request->post('thumbnail'), 'quotes');
-
-        Quotes::insert([
-            'text_en' => trim($request->post('text_en')),
-            'text_ka' => trim($request->post('text_ka')),
-            'movie_id' => trim($request->post('movie')),
-            'image' => trim($image),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
+        $actions->insertData();
         return insertSuccessResponse();
     }
 
     public function QuotesJson (Request $request)
     {
-        $search = trim($request->get('search'));
-
-        $quotes = Quotes::where('deleted', 0)->where(function ($query) use ($search) {
-            $query->where('text_en', 'like', "%{$search}%")->orWhere('text_ka', 'like', "%{$search}%");
-        })
-        ->orderBy('id', 'desc')->paginate(4);
-
-        $arrayData = $quotes->toArray();
-
-        return response()->json([
-            'message' => 'Let\'s return the content',
-            'html' => view('admin.quotes.item', ['data' => $quotes])->render(),
-            'current_page' => $arrayData['current_page'],
-            'next_page_url' => $arrayData['next_page_url'],
-            'to' => $arrayData['to'],
-            'total' => $arrayData['total']
-        ]);
+        $actions = new QuoteActions();
+        return $actions->AllToJson();
     }
 
     public function TheQuoteJson (Request $request)
@@ -69,7 +39,7 @@ class QuotesAdmin extends HelperController
         if ($movies->count() == 0) return recordNotFoundResponse();
 
         return response()->json([
-            'message' => 'ჩანაწერი ნაპოვნია',
+            'message' => __('main.record_found'),
             'status' => 1,
             'html' => view('admin.quotes.edit', ['row' => $movies->first()])->render()
         ]);
@@ -77,30 +47,13 @@ class QuotesAdmin extends HelperController
 
     public function EditQuote (Request $request, int $id)
     {
-        $validator = Validator::make($request->all(), [
-            'text_en' => 'required|max:535',
-            'text_ka' => 'required|max:535',
-            'movie' => 'required|numeric'
-        ]);
-
-        if ($validator->fails()) return pleaseFillAllFields();
+        $actions = new QuoteActions();
+        if($actions->inputsFail()) return pleaseFillAllFields();
 
         $check = Quotes::where('id', $id);
         if($check->count() == 0) return recordNotFoundResponse();
-        $postedImage = trim($request->post('thumbnail'));
 
-        $values = [
-            'text_en' => trim($request->post('text_en')),
-            'text_ka' => trim($request->post('text_ka')),
-            'movie_id' => trim($request->post('movie')),
-        ];
-
-        if(strlen($postedImage) > 24){
-            $values['image'] = trim($this->saveBase64($postedImage, 'quotes'));
-        }
-
-        Quotes::where('id', $id)->update($values);
-
+        $actions->id($id)->update();
         return updateSuccessResponse();
     }
 

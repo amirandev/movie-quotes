@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\HelperController;
-use App\Http\Actions\Directors as DirectorActions;
+use App\Http\Actions\DirectorActions;
 use App\Models\Directors;
 use App\Models\Quotes;
 use App\Models\Movies;

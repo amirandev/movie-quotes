@@ -15,8 +15,10 @@ class CreateDirectorsTable extends Migration
     {
         Schema::create('directors', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique()->nullable();
+            $table->string('name_en')->unique()->nullable();
+            $table->string('name_ka')->nullable();
             $table->string('image')->nullable();
+            $table->integer('deleted');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
